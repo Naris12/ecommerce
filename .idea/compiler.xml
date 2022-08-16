@@ -12,7 +12,7 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="Shopme" target="1.5" />
+      <module name="Shopme" target="17" />
       <module name="ShopmeBackend" target="17" />
       <module name="ShopmeCommon" target="17" />
       <module name="ShopmeFrontEnd" target="17" />
