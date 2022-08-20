@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width,initial-scale=1.0, minimum=1.0">
 
 
-    <title>Create new User</title>
+    <title>[[${pageTitle}]]</title>
 
     <link rel="stylesheet" type="text/css"  th:href="@{/webjars/bootstrap/css/bootstrap.min.css}"/>
     <script type="text/javascript" th:src="@{/webjars/jquery/jquery.min.js}"></script>
@@ -65,36 +65,38 @@
         </div>
         <div >
 
-            <H1>Manage Users | Create new User</H1>
+            <H1>Manage Users | [[${pageTitle}]]</H1>
 
         </div>
-       <form th:object="${user}" th:action="@{/users/save}" method="post" style="max-width:700px; margin:0 auto"  onsubmit="return checkEmailUnique(this)"/>
+       <form th:object="${user}" th:action="@{/users/save}" method="post" style="max-width:700px; margin:0 auto"  onsubmit="return checkEmailUnique(this)">
+           <input type="hidden"th:field="*{id}">
            <div class="border border-secondary rounded p-3">
                <div class="form-group row ">
                    <label class="col-sm-4 col-form-label">Email :</label>
                    <div class="col-sm-8">
-                       <input type="email" id="email" class="form-control" field="{email}" name="email" required minlength="8" maxlength="120">
+                       <input type="email" id="email" class="form-control" th:field="*{email}"  required minlength="8" maxlength="120">
                    </div>
                </div>
 
                <div class="form-group row ">
                    <label class="col-sm-4 col-form-label">First name :</label>
                    <div class="col-sm-8">
-                       <input type="text" class="form-control" field="{firstname}" name="firstname" required minlength="2" maxlength="120">
+                       <input type="text" class="form-control" th:field="*{firstname}" required minlength="2" maxlength="120">
                    </div>
                </div>
 
                <div class="form-group row ">
                    <label class="col-sm-4 col-form-label">Last name :</label>
                    <div class="col-sm-8">
-                       <input type="text" class="form-control" field="{lastname}" name="lastname" required minlength="2" maxlength="120">
+                       <input type="text" class="form-control" th:field="*{lastname}"  required minlength="2" maxlength="120">
                    </div>
                </div>
 
                <div class="form-group row ">
                    <label class="col-sm-4 col-form-label">Password :</label>
                    <div class="col-sm-8">
-                       <input type="password" class="form-control" field="{password}" name="password" required minlength="8" maxlength="120">
+                       <input  th:if="${user.id==null}" type="password" class="form-control" th:field="*{password}"  required minlength="8" maxlength="120">
+                       <input  th:if="${user.id!=null}" type="password" class="form-control" th:field="*{password}"  minlength="8" maxlength="120">
                    </div>
                </div>
 
@@ -102,7 +104,7 @@
                    <label class="col-sm-4 col-form-label">Roles :</label>
                    <div class="col-sm-8">
                     <th:block th:each="role : ${listrole}">
-                        <input type="checkbox" field="{roles}" name="roles"
+                        <input type="checkbox" th:field="*{roles}" name="roles"
                         th:text="${role.name}"
                                th:value="${role.id}"
                                class="m-2"
@@ -116,7 +118,7 @@
                <div class="form-group row ">
                    <label class="col-sm-4 col-form-label">enabled :</label>
                    <div class="col-sm-8">
-                       <input type="checkbox" field="{enable}" name="enable" class="m-2">
+                       <input type="checkbox" th:field="*{enable}" name="enable" class="m-2">
                    </div>
                </div>
                <div class="text-center">
@@ -157,8 +159,9 @@
     function checkEmailUnique(form){
     url="[[@{/users/check_email}]]";
     userEmail=$("#email").val();
+    userId=$("#id").val();
     csrfValue=$("input[name='_csrf']").val();
-    params={email: userEmail,_csrf:csrfValue};
+    params={id:userId,email: userEmail,_csrf:csrfValue};
 
     $.post(url,params,function(response){
         if(response=="OK"){

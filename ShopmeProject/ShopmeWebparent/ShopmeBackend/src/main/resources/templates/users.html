@@ -8,6 +8,8 @@
     <title>Shopme Admin Control panel</title>
 
     <link rel="stylesheet" type="text/css"  th:href="@{/webjars/bootstrap/css/bootstrap.min.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/fontawesome/all.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/style.css}"/>
     <script type="text/javascript" th:src="@{/webjars/jquery/jquery.min.js}"></script>
     <script type="text/javascript" th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
 </head>
@@ -88,14 +90,16 @@
                 <tbody>
                 <tr th:each="user:${listalluser}">
                     <td>[[${user.id}]]</td>
-                    <td></td>
+                    <td><span class="fa-solid fa-image-portrait fa-3x icon-dark " > </span></td>
                     <td>[[${user.email}]]</td>
                     <td>[[${user.firstname}]]</td>
                     <td>[[${user.lastname}]]</td>
                     <td>[[${user.roles}]]</td>
-                    <td>[[${user.enable}]]</td>
+                    <td><a th:if="${user.enable==true }" class="fas fa-check-circle fa-2x icon-green" href=""></a>
+                        <a th:if="${user.enable==false }" class="fas fa-check-circle fa-2x icon-dark" href=""></a>
+                    </td>
                     <td>
-                        Edit &nbsp; Delete
+                        <a class="fa-solid fa-square-pen fa-3x icon-green " th:href="@{'/users/edit/'+${user.id}}" title="Edit this user"></a>   &nbsp;  <a class="fa-solid fa-trash fa-3x"></a>
                     </td>
                 </tr>
 
