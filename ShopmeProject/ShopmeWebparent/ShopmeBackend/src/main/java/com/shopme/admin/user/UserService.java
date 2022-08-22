@@ -8,10 +8,12 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.NoSuchElementException;
 
 @Service
+@Transactional
 public class UserService {
 
     @Autowired
@@ -78,5 +80,19 @@ public class UserService {
             throw new UserNotFoundException("Could not find anyuser with id "+id);
         }
 
+    }
+
+    public void Delete(int id) throws UserNotFoundException {
+        Long countById= userRepository.countById(id);
+
+        if(countById==null||countById==0){
+            throw new UserNotFoundException("Could not find anyuser with id "+id);
+        }
+
+        userRepository.deleteById(id);
+    }
+
+    public void updateenable(int id,boolean eneble){
+        userRepository.updateEnabledStatus(id,eneble);
     }
 }

@@ -6,10 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
@@ -41,10 +39,11 @@ public class UserController {
     }
 
     @PostMapping("/users/save")
-    public String saveuser (User user, RedirectAttributes redirectAttributes){
+    public String saveuser (User user, RedirectAttributes redirectAttributes, @RequestParam("image")MultipartFile multipartFile){
         System.out.println(user);
-        service.save(user);
-        redirectAttributes.addFlashAttribute("message","The user have been saved successfully");
+        System.out.println(multipartFile.getOriginalFilename());
+        //service.save(user);
+        //redirectAttributes.addFlashAttribute("message","The user have been saved successfully");
         return "redirect:/users";
     }
 
@@ -64,6 +63,26 @@ public class UserController {
 
     }
 
+    @GetMapping("/users/delete/{id}")
+    public String deleteuser(@PathVariable (name = "id")Integer id,RedirectAttributes redirectAttributes){
+        try{
+            service.Delete(id);
+            redirectAttributes.addFlashAttribute("message","The user id "+id+" has been deleted");
 
+        } catch (UserNotFoundException e) {
+            redirectAttributes.addFlashAttribute("message",e.getMessage());
+
+        }
+        return "redirect:/users";
+    }
+
+    @GetMapping("/users/{id}/enabled/{status}")
+    public String updateUserEnabledStatus(@PathVariable("id")int id,@PathVariable("status") boolean enable,RedirectAttributes redirectAttributes){
+        service.updateenable(id,enable);
+        String status=enable ? "enabled" : "disabled";
+        String  message="the user ID "+id+" has been "+status;
+        redirectAttributes.addFlashAttribute("message",message);
+        return "redirect:/users";
+    }
 
 }

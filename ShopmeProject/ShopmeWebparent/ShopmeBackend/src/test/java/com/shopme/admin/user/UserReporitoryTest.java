@@ -89,10 +89,29 @@ public class UserReporitoryTest {
     }
 
     @Test
+    public void testcountbyid(){
+        int test=1;
+        long countbyid = repository.countById(test);
+        assertThat(countbyid).isNotNull().isGreaterThan(0);
+
+    }
+
+    @Test
     public void testGetUserByemail(){
         String email="test@email";
         User user = repository.getUserByEmail(email);
         assertThat(user).isNotNull();
     }
 
+    @Test
+    public void testdisableuser(){
+        int id=1;
+        repository.updateEnabledStatus(id,false);
+    }
+
+    @Test
+    public void testenableduser(){
+        int id=1;
+        repository.updateEnabledStatus(id,true);
+    }
 }
